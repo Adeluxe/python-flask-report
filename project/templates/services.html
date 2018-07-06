@@ -1,0 +1,62 @@
+{% extends "base.html"%}
+{% set active_page = "Services" %}
+
+
+{% block content %}
+<table id="servicedata" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>EID</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for service in data %}
+        		<tr>
+        			<td>{{ service['eid'] }}</td>
+        			<td><a href="#" data-pk="{{ loop.index }}">{{ service['name'] }} {{ loop.index }} </td>
+        			<td>{{ service['email'] }}</td>
+        		</tr>
+        	{% endfor %}
+        </tbody>
+    </table>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+<script type="text/javascript">
+    $.fn.editable.defaults.mode = 'inline';
+	$(document).ready(function() {
+
+	var table = $('#servicedata').DataTable( {
+	        "scrollY":        "200px",
+	        "scrollCollapse": true,
+	        "paging":         false
+	    } );
+
+        $('#servicedata a').editable({
+            type: 'text',
+            name: 'name',
+            url: '/updatename',
+            title: 'Enter new name'
+        });
+
+        $('#servicedata tbody').on( 'click', 'tr', function () {
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        } );
+
+	} );
+</script>
+
+{% endblock %}
